@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- no lang attribute on html element -->
+  <title>Bad Page</title>
+  <style>
+    /* Low contrast: light gray text on white background */
+    .low-contrast { color: #aaaaaa; background: #ffffff; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <h1>Main Heading</h1>
+
+  <!-- Skipped heading level: h1 -> h3 (no h2) -->
+  <h3>Sub Section without h2</h3>
+
+  <!-- Image missing alt attribute entirely -->
+  <img src="logo.png">
+
+  <!-- Image with empty/useless alt -->
+  <img src="chart.png" alt="image">
+
+  <!-- Low-contrast paragraph -->
+  <p class="low-contrast">This text has insufficient color contrast against the background.</p>
+
+  <!-- Input with no associated label -->
+  <input type="text" id="email" placeholder="Enter email">
+
+  <!-- Input with label that doesn't associate via for/id -->
+  <span>Name:</span>
+  <input type="text" id="name">
+
+  <!-- Generic link text -->
+  <p>For more information <a href="https://example.com/info">click here</a>.</p>
+  <p><a href="https://example.com/report">Read more</a> about accessibility.</p>
+
+  <!-- Table with no header row -->
+  <table>
+    <tbody>
+      <tr><td>Alice</td><td>Engineering</td></tr>
+      <tr><td>Bob</td><td>Design</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Button with no accessible name -->
+  <button></button>
+
+  <!-- ARIA role with missing required owned elements -->
+  <div role="list">
+    <span>Not a listitem</span>
+  </div>
+
+</body>
+</html>

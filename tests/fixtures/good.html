@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Accessible Page</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #1a1a1a; background: #ffffff; }
+    a:focus, button:focus { outline: 3px solid #0055cc; }
+  </style>
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header role="banner">
+    <h1>Accessible Sample Page</h1>
+    <nav aria-label="Primary navigation">
+      <ul>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" role="main">
+    <h2>Introduction</h2>
+    <p>This page demonstrates accessible markup patterns that pass WCAG 2.1 AA criteria.</p>
+
+    <h3>Images</h3>
+    <img src="team-photo.png" alt="The engineering team gathered around a whiteboard during a planning session">
+    <img src="decorative-divider.png" alt=""><!-- decorative -->
+
+    <h3>Links</h3>
+    <p>Learn more about <a href="/accessibility-policy">our accessibility policy</a>.</p>
+    <p>Download the <a href="/report.pdf">2024 Annual Accessibility Report (PDF)</a>.</p>
+
+    <h3>Forms</h3>
+    <form>
+      <div>
+        <label for="user-name">Full name</label>
+        <input type="text" id="user-name" name="name" autocomplete="name">
+      </div>
+      <div>
+        <label for="user-email">Email address</label>
+        <input type="email" id="user-email" name="email" autocomplete="email">
+      </div>
+      <button type="submit">Submit form</button>
+    </form>
+
+    <h3>Data Table</h3>
+    <table>
+      <caption>Team member assignments</caption>
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Department</th>
+          <th scope="col">Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Alice</td><td>Engineering</td><td>Lead</td></tr>
+        <tr><td>Bob</td><td>Design</td><td>IC</td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  <footer role="contentinfo">
+    <p>&copy; 2024 Example Organization. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
