@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>508 Scanner Local</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Local-first accessibility scanner</p>
+        <h1>508 Scanner Local</h1>
+        <p class="lede">Run automated and semi-automated Section 508 / WCAG scans from your machine.</p>
+      </div>
+      <nav aria-label="Report links">
+        <a href="/reports/example-smoke/report.html">Example report</a>
+        <a href="/reports/docs-smoke/report.html">Docs smoke report</a>
+      </nav>
+    </header>
+
+    <main id="main" class="layout">
+      <section aria-labelledby="new-scan-title" class="panel">
+        <h2 id="new-scan-title">New scan</h2>
+        <form id="scan-form">
+          <label>
+            Starting website URL
+            <input name="url" type="url" placeholder="https://example.com">
+          </label>
+
+          <label>
+            Local document paths
+            <textarea name="filesText" rows="4" placeholder="/Users/me/Documents/report.pdf&#10;/Users/me/Documents/deck.pptx"></textarea>
+          </label>
+
+          <div class="grid">
+            <label>
+              Max pages
+              <input name="maxPages" type="number" min="0" value="5">
+            </label>
+            <label>
+              Max depth
+              <input name="maxDepth" type="number" min="0" value="2">
+            </label>
+            <label>
+              Concurrency
+              <input name="concurrency" type="number" min="1" value="2">
+            </label>
+            <label>
+              Timeout ms
+              <input name="timeoutMs" type="number" min="1000" value="60000">
+            </label>
+          </div>
+
+          <label>
+            Output folder name
+            <input name="outName" type="text" placeholder="my-scan">
+          </label>
+
+          <fieldset>
+            <legend>Options</legend>
+            <label class="check"><input name="sameOrigin" type="checkbox" checked> Same origin only</label>
+            <label class="check"><input name="sameHost" type="checkbox" checked> Same host only</label>
+            <label class="check"><input name="downloadDocuments" type="checkbox" checked> Download discovered documents</label>
+            <label class="check"><input name="includeScreenshots" type="checkbox"> Include screenshots</label>
+            <label class="check"><input name="verbose" type="checkbox"> Verbose logs</label>
+          </fieldset>
+
+          <button type="submit">Start scan</button>
+          <p id="form-message" role="status"></p>
+        </form>
+      </section>
+
+      <section aria-labelledby="jobs-title" class="panel">
+        <div class="section-heading">
+          <h2 id="jobs-title">Scan jobs</h2>
+          <button id="refresh" type="button">Refresh</button>
+        </div>
+        <div id="jobs" class="jobs" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>This tool supports automated and semi-automated review. It is not legal certification of accessibility compliance.</p>
+    </footer>
+
+    <script src="/assets/app.js" type="module"></script>
+  </body>
+</html>

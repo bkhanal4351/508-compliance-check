@@ -1,0 +1,39 @@
+{
+  "name": "508-scanner-local",
+  "version": "0.1.0",
+  "description": "Local-first Section 508 / WCAG accessibility scanner CLI.",
+  "type": "module",
+  "bin": {
+    "508-scanner-local": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "ui": "tsx src/server.ts",
+    "start": "node dist/server.js",
+    "scan": "tsx src/cli.ts",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "cheerio": "^1.0.0",
+    "commander": "^12.1.0",
+    "csv-stringify": "^6.5.2",
+    "fast-xml-parser": "^4.5.1",
+    "fs-extra": "^11.2.0",
+    "jszip": "^3.10.1",
+    "p-limit": "^6.2.0",
+    "playwright": "^1.49.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
