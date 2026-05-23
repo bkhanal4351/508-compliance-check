@@ -259,45 +259,4 @@ def scan_docx(file_path: str, use_semantic: bool = False) -> list[Finding]:
     findings.extend(_check_language(doc))
     findings.extend(_check_fake_lists(doc))
 
-    if use_semantic:
-        try:
-            from ai.prompts import run_semantic_check
-            findings.extend(_semantic_docx_findings(doc, run_semantic_check))
-        except Exception as e:
-            logger.warning("Semantic checks disabled: %s", e)
-
-    return findings
-
-
-def _semantic_docx_findings(doc: Document, semantic_fn) -> list[Finding]:
-    findings = []
-    drawing_xpath = f".//{qn('w:drawing')}"
-    for i, para in enumerate(doc.paragraphs):
-        for drawing in para._element.findall(drawing_xpath):
-            for elem in drawing.iter():
-                if elem.tag.endswith("}docPr"):
-                    descr = elem.get("descr", "").strip()
-                    name = elem.get("name", f"Image {i+1}")
-                    if descr:
-                        result = semantic_fn("alt_text", {
-                            "image_context": f"DOCX image '{name}'",
-                            "nearby_heading": para.text.strip()[:100],
-                            "alt_text": descr,
-                        })
-                        if result and not result.get("passes"):
-                            wcag_sc, sec508_ref, sev = get_refs("docx-image-alt-missing")
-                            findings.append(Finding(
-                                id=str(uuid.uuid4())[:8],
-                                rule="docx-image-alt-missing",
-                                wcag_sc=wcag_sc,
-                                sec508_ref=sec508_ref,
-                                severity=sev,
-                                title="Image alt text may not be meaningful",
-                                description=result.get("reasoning", ""),
-                                location=f"Paragraph {i+1}: image '{name}'",
-                                snippet=f'descr="{descr}"',
-                                suggested_fix=result.get("suggested_fix"),
-                                source="semantic",
-                                needs_human_review=True,
-                            ))
     return findings

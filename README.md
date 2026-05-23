@@ -8,12 +8,14 @@ Internal accessibility QA tool for scanning websites and documents against Secti
 
 | Input | Engine | Rules |
 |---|---|---|
-| URL (+ crawl) | Playwright + axe-core + AI | Alt text, contrast, labels, headings, links, ARIA |
+| URL (+ crawl) | Playwright + axe-core | Alt text, contrast, labels, headings, links, ARIA |
 | PDF | pikepdf + veraPDF (optional) | Tagged structure, language, title, form fields, figures |
 | DOCX | python-docx | Headings, images, tables, hyperlinks, lists, language |
 | PPTX | python-pptx | Slide titles, shape alt text, reading order, color contrast |
 | XLSX | openpyxl | Workbook title, sheet names, table structure, merged cells |
-| Image | Pillow + AI | Alt text quality via semantic check |
+| Image | Pillow | Alt text presence and basic quality check |
+
+> **AI-enhanced version:** The `AI-enabled` branch adds Groq/LLM-powered semantic checks for alt text quality, link text analysis, and heading structure evaluation.
 
 ---
 
