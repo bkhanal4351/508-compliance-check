@@ -37,7 +37,7 @@ def _f(rule: str, title: str, description: str, location: str,
 
 def _check_headings(doc: Document) -> list[Finding]:
     findings = []
-    heading_styles = [p for p in doc.paragraphs if p.style and p.style.name.startswith("Heading")]
+    heading_styles = [p for p in doc.paragraphs if p.style and p.style.name and p.style.name.startswith("Heading")]
 
     if not heading_styles:
         findings.append(_f(
@@ -82,9 +82,10 @@ def _check_headings(doc: Document) -> list[Finding]:
 
 def _check_fake_headings(doc: Document) -> list[Finding]:
     findings = []
-    heading_style_names = {p.style.name for p in doc.paragraphs if p.style and p.style.name.startswith("Heading")}
+    heading_style_names = {p.style.name for p in doc.paragraphs if p.style and p.style.name and p.style.name.startswith("Heading")}
     for i, para in enumerate(doc.paragraphs):
-        if para.style and para.style.name.startswith("Heading"):
+        style_name = (para.style.name or "") if para.style else ""
+        if style_name.startswith("Heading"):
             continue
         text = para.text.strip()
         if not text:
@@ -97,7 +98,7 @@ def _check_fake_headings(doc: Document) -> list[Finding]:
                 findings.append(_f(
                     "docx-fake-heading",
                     "Visually styled heading not using Heading style",
-                    f"Paragraph '{text[:60]}' appears to be a heading (bold, {size_pt}pt) but uses style '{para.style.name}'. Screen readers won't recognize it as a heading.",
+                    f"Paragraph '{text[:60]}' appears to be a heading (bold, {size_pt}pt) but uses style '{style_name or 'Normal'}'. Screen readers won't recognize it as a heading.",
                     f"Paragraph {i+1}: '{text[:60]}'",
                     fix=f"Apply a Heading style to '{text[:60]}' instead of manually applying bold/large font.",
                 ))
@@ -229,7 +230,7 @@ def _check_fake_lists(doc: Document) -> list[Finding]:
         text = para.text.strip()
         if not text:
             continue
-        style_name = para.style.name if para.style else ""
+        style_name = (para.style.name or "") if para.style else ""
         if "List" in style_name:
             continue
         if _bullet_pattern.match(text) or _number_pattern.match(text):
