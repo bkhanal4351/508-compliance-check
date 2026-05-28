@@ -90,16 +90,51 @@ for _k, _v in _STATE_DEFAULTS.items():
         st.session_state[_k] = _v
 
 # ---------------------------------------------------------------------------
+# Custom CSS
+# ---------------------------------------------------------------------------
+st.markdown("""
+<style>
+/* Vertically centre the logo with the title text */
+[data-testid="stHorizontalBlock"] [data-testid="stImage"] {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-top: 8px;
+}
+
+/* Larger, bolder tab labels */
+.stTabs [data-baseweb="tab"] p,
+.stTabs [data-baseweb="tab"] span,
+.stTabs [data-baseweb="tab"] div,
+.stTabs button[role="tab"] p,
+.stTabs button[role="tab"] {
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em !important;
+}
+.stTabs [data-baseweb="tab"] {
+    padding: 14px 36px !important;
+}
+.stTabs [data-baseweb="tab"][aria-selected="true"] p,
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    color: #1a6b3c !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------------------------
 # Shared page header + tabs
 # ---------------------------------------------------------------------------
-_hdr_img, _hdr_txt = st.columns([1, 10])
+_hdr_img, _hdr_txt = st.columns([1, 11])
 with _hdr_img:
-    st.image(str(ROOT / "assets" / "epa_logo.png"), width=72)
+    st.image(str(ROOT / "assets" / "epa_logo.png"), width=68)
 with _hdr_txt:
     st.title("EPA Compliance Tools")
     st.caption("Section 508 / WCAG accessibility scanning · Dead-link verification")
 
-tab_508, tab_url = st.tabs(["♿  508 Compliance Scanner", "🔗  URL Checker"])
+st.markdown("<div style='margin-bottom:28px'></div>", unsafe_allow_html=True)
+
+tab_508, tab_url = st.tabs(["📋  508 Compliance Scanner", "🔗  URL Checker"])
 
 
 # =============================================================================
