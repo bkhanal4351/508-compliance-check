@@ -1,8 +1,87 @@
-# 508 / WCAG 2.1 AA Accessibility Scanner — Deterministic Build
+# EPA Compliance Tools — 508 Scanner + URL Checker
 
-Internal accessibility QA tool for scanning websites and documents against **Section 508** and **WCAG 2.1 AA** standards. All checks in this branch are **rule-based and deterministic** — no AI or API keys required.
+> **This is the `508-and-docURL-check` branch** — a combined app with both tools available via tabs.
+>
+> - **`main`** — 508 / WCAG compliance scanner only (deterministic, no AI)
+> - **`url-verify`** — URL checker only (standalone)
+> - **`AI-enabled`** — 508 scanner with Groq/LLM semantic checks
 
-> **AI-enhanced version:** The [`AI-enabled`](../../tree/AI-enabled) branch adds Groq/LLM-powered semantic checks for alt text quality, link text analysis, and heading structure evaluation on top of everything here.
+---
+
+## Quick start (fresh clone)
+
+```bash
+# 1. Clone this branch
+git clone -b 508-and-docURL-check https://github.com/bkhanal4351/508-compliance-check.git
+cd 508-compliance-check
+
+# 2. Create and activate a virtual environment (Python 3.9+ required, 3.13 recommended)
+python3 -m venv .venv
+source .venv/bin/activate        # Mac / Linux
+# .venv\Scripts\activate         # Windows
+
+# 3. Install all dependencies
+pip install -r requirements.txt
+
+# 4. Install the Playwright browser (needed for web URL scanning in the 508 tab)
+playwright install chromium
+
+# 5. Run the app
+streamlit run app.py
+```
+
+Open <http://localhost:8501> in your browser.
+
+> **Note:** The URL Checker tab works immediately after `pip install`.
+> The 508 web scanner tab requires the `playwright install chromium` step above.
+> Document uploads (PDF, DOCX, PPTX, XLSX) work in both tabs without Playwright.
+
+---
+
+## What's in the app
+
+**♿ 508 Compliance Scanner**
+Scans a URL (crawls with axe-core) or an uploaded document (PDF, DOCX, PPTX, XLSX, image)
+for Section 508 / WCAG 2.1 AA violations. Exports findings as PDF or CSV.
+
+**🔗 URL Checker**
+Accepts uploaded documents (DOCX, PDF, PPTX, XLSX, TXT, HTML), extracts every URL
+(embedded hyperlinks + plain-text), checks each one for dead / suspicious / alive status,
+and exports a prioritized report as Excel or CSV.
+
+---
+
+## Repository layout
+
+```
+508-compliance-check/
+├── app.py                    ← Combined Streamlit app (two tabs)
+├── requirements.txt          ← All dependencies for both tools
+│
+├── scanners/                 ← 508 scanner: web, PDF, DOCX, PPTX, XLSX, image
+├── report/                   ← 508 report builder + PDF/CSV export
+├── utils/                    ← 508 scanner utilities (crawler, WCAG refs)
+├── ai/                       ← AI stubs (active on AI-enabled branch only)
+│
+└── url_checker/              ← URL checker modules
+    ├── extractors/           ← URL extraction: docx, pdf, pptx, xlsx, text
+    ├── validators/           ← HTTP checking, status classification, Wayback
+    ├── exporters/            ← Excel and CSV export
+    └── url_checker_utils/    ← URL checker constants and URL helpers
+```
+
+---
+
+## Running tests
+
+```bash
+# 508 scanner tests
+pytest tests/ -v
+
+# URL checker classification tests (no network required)
+cd url_checker
+pytest tests/test_status_classifier.py -v
+```
 
 ---
 
