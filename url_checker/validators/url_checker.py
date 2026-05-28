@@ -18,6 +18,7 @@ from utils.constants import (
 )
 from utils.url_utils import classify_skip_reason, is_epa_internal, normalize_url
 from validators.status_classifier import classify_url_result
+from validators.wayback import fetch_wayback
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +71,13 @@ async def _check_one(client, sem, url, locations, fetch_titles, retry, on_progre
 
     async with sem:
         result = await _do_request(client, url, locations, fetch_titles, retries=1 if retry else 0)
+
+    # For Dead URLs, look up the most recent Wayback Machine snapshot.
+    # Done outside the semaphore so wayback calls don't consume concurrency slots.
+    if result.tier == "Dead":
+        snap_url, snap_date = await fetch_wayback(client, url)
+        result.wayback_url = snap_url
+        result.wayback_snapshot_date = snap_date
 
     if on_progress:
         on_progress(url, result)

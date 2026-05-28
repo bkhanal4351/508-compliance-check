@@ -16,12 +16,13 @@ def export_csv(results: list[CheckResult]) -> bytes:
         "Status", "Original URL", "Final URL", "HTTP Code",
         "Source File", "Location", "Context", "Response Time (ms)",
         "Redirect Count", "Redirect Chain", "Reason",
+        "Wayback Snapshot URL", "Wayback Snapshot Date",
         "EPA Internal", "Checked At",
     ])
 
     for r in sorted_results:
         primary = r.locations[0] if r.locations else None
-        chain_str = " → ".join(f"{code} {url}" for code, url in r.redirect_chain) if r.redirect_chain else ""
+        chain_str = " -> ".join("{} {}".format(code, url) for code, url in r.redirect_chain) if r.redirect_chain else ""
         writer.writerow([
             r.tier,
             r.url,
@@ -34,6 +35,8 @@ def export_csv(results: list[CheckResult]) -> bytes:
             r.redirect_count,
             chain_str,
             r.reason or "",
+            r.wayback_url or ("No snapshot found" if r.tier == "Dead" else ""),
+            r.wayback_snapshot_date or "",
             "Yes" if r.is_epa_internal else "No",
             r.checked_at.strftime("%Y-%m-%d %H:%M UTC"),
         ])

@@ -35,6 +35,8 @@ class CheckResult:
     reason: Optional[str]                            # Human note for Suspicious / Dead / Skipped
     page_title: Optional[str]
     is_epa_internal: bool
+    wayback_url: Optional[str] = None           # Wayback Machine snapshot URL (Dead URLs only)
+    wayback_snapshot_date: Optional[str] = None  # Human-readable snapshot date e.g. "Jan 01, 2023"
     locations: List[UrlLocation] = field(default_factory=list)
     checked_at: datetime = field(default_factory=datetime.utcnow)
 

@@ -92,7 +92,8 @@ def _write_details(ws, results: list[CheckResult]) -> None:
     headers = [
         "Status", "Original URL", "Final URL", "HTTP Code",
         "Source File", "Location", "Context", "Response Time (ms)",
-        "Redirects", "Reason", "Redirect Chain", "EPA Internal", "Checked At",
+        "Redirects", "Reason", "Wayback Snapshot", "Wayback Date", "Redirect Chain",
+        "EPA Internal", "Checked At",
     ]
 
     for col, header in enumerate(headers, 1):
@@ -120,6 +121,8 @@ def _write_details(ws, results: list[CheckResult]) -> None:
             r.response_time_ms,
             r.redirect_count,
             r.reason or "",
+            r.wayback_url or ("No snapshot found" if r.tier == "Dead" else ""),
+            r.wayback_snapshot_date or "",
             chain_str,
             "Yes" if r.is_epa_internal else "No",
             r.checked_at.strftime("%Y-%m-%d %H:%M UTC"),
@@ -133,13 +136,18 @@ def _write_details(ws, results: list[CheckResult]) -> None:
                 cell.fill = fill
             # Make URLs clickable
             if col == 2 and r.url.startswith("http"):
-                cell.value = f'=HYPERLINK("{r.url}","{r.url}")'
+                cell.value = '=HYPERLINK("{}","{}")'.format(r.url, r.url)
                 cell.font = Font(color="0563C1", underline="single")
             if col == 3 and r.final_url and r.final_url.startswith("http"):
-                cell.value = f'=HYPERLINK("{r.final_url}","{r.final_url}")'
+                cell.value = '=HYPERLINK("{}","{}")'.format(r.final_url, r.final_url)
+                cell.font = Font(color="0563C1", underline="single")
+            # Wayback snapshot as clickable link (col 11)
+            if col == 11 and r.wayback_url:
+                label = "View snapshot"
+                cell.value = '=HYPERLINK("{}","{}")'.format(r.wayback_url, label)
                 cell.font = Font(color="0563C1", underline="single")
 
     # Auto-width (capped)
-    col_widths = [12, 50, 40, 10, 20, 20, 40, 18, 10, 40, 50, 12, 20]
+    col_widths = [12, 50, 40, 10, 20, 20, 40, 18, 10, 40, 40, 16, 50, 12, 20]
     for col, width in enumerate(col_widths, 1):
         ws.column_dimensions[get_column_letter(col)].width = width

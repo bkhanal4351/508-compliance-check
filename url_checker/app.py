@@ -394,15 +394,24 @@ if action_items:
         primary = r.locations[0] if r.locations else None
         loc_str = "{} — {}".format(primary.source_file, primary.location) if primary else "Unknown location"
         context_str = primary.context if primary and primary.context else ""
+        wayback_line = ""
+        if r.wayback_url:
+            wayback_line = "\n\n**Archive:** [View last known snapshot ({})]({})".format(
+                r.wayback_snapshot_date or "date unknown", r.wayback_url
+            )
+        elif r.tier == "Dead":
+            wayback_line = "\n\n**Archive:** No snapshot found in Wayback Machine"
         msg = (
             "**{tier}** `{code}` &nbsp;|&nbsp; {url}\n\n"
-            "**Why:** {reason}\n\n"
+            "**Why:** {reason}"
+            "{wayback}\n\n"
             "**Where in document:** {loc}{ctx}"
         ).format(
             tier=r.tier,
             code=r.status_code or "N/A",
             url=r.url,
             reason=r.reason or "Unknown",
+            wayback=wayback_line,
             loc=loc_str,
             ctx="\n\n**Context:** …{}…".format(context_str) if context_str else "",
         )
@@ -448,6 +457,12 @@ else:
                 st.markdown("**Status:** {} (HTTP {})".format(r.tier, r.status_code or "N/A"))
                 if r.reason:
                     st.markdown("**Why flagged:** {}".format(r.reason))
+                if r.wayback_url:
+                    st.markdown("**Wayback Machine:** [Last snapshot — {}]({})".format(
+                        r.wayback_snapshot_date or "date unknown", r.wayback_url
+                    ))
+                elif r.tier == "Dead":
+                    st.markdown("**Wayback Machine:** No archived snapshot found")
                 st.markdown("**Response time:** {:.0f} ms".format(r.response_time_ms))
                 st.markdown("**EPA Internal:** {}".format("Yes" if r.is_epa_internal else "No"))
                 if r.page_title:
@@ -478,12 +493,15 @@ else:
 # ---------------------------------------------------------------------------
 st.divider()
 st.subheader("Export")
-ex1, ex2 = st.columns(2)
 
 ts_str = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
 base_name = (st.session_state.source_names[0].rsplit(".", 1)[0]
              if st.session_state.source_names else "results")
 filename_base = "url_check_{}_{}".format(base_name, ts_str)
+
+issues_only = [r for r in results if r.tier in ("Dead", "Suspicious")]
+
+ex1, ex2, ex3, ex4 = st.columns(4)
 
 with ex1:
     excel_bytes = export_excel(
@@ -492,7 +510,7 @@ with ex1:
         source_names=st.session_state.source_names,
     )
     st.download_button(
-        "⬇️  Download Excel Report (.xlsx)",
+        "⬇️ All results (.xlsx)",
         data=excel_bytes,
         file_name="{}.xlsx".format(filename_base),
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -502,9 +520,41 @@ with ex1:
 with ex2:
     csv_bytes = export_csv(results)
     st.download_button(
-        "⬇️  Download CSV",
+        "⬇️ All results (.csv)",
         data=csv_bytes,
         file_name="{}.csv".format(filename_base),
         mime="text/csv",
         use_container_width=True,
     )
+
+with ex3:
+    if issues_only:
+        excel_issues = export_excel(
+            issues_only,
+            settings={"timeout": timeout, "max_workers": max_workers, "retry": retry},
+            source_names=st.session_state.source_names,
+        )
+        st.download_button(
+            "⬇️ Issues only (.xlsx)",
+            data=excel_issues,
+            file_name="{}_issues.xlsx".format(filename_base),
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            use_container_width=True,
+            type="primary",
+        )
+    else:
+        st.button("⬇️ Issues only (.xlsx)", disabled=True, use_container_width=True)
+
+with ex4:
+    if issues_only:
+        csv_issues = export_csv(issues_only)
+        st.download_button(
+            "⬇️ Issues only (.csv)",
+            data=csv_issues,
+            file_name="{}_issues.csv".format(filename_base),
+            mime="text/csv",
+            use_container_width=True,
+            type="primary",
+        )
+    else:
+        st.button("⬇️ Issues only (.csv)", disabled=True, use_container_width=True)
