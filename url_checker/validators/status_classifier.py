@@ -10,7 +10,7 @@
 from typing import List, Optional, Tuple
 from urllib.parse import urlparse   # splits a URL into its parts (scheme, host, path…)
 
-from utils.constants import SOFT_404_PATTERNS  # the list of "page not found" phrases
+from url_checker_utils.constants import SOFT_404_PATTERNS  # the list of "page not found" phrases
 
 
 def classify_url_result(

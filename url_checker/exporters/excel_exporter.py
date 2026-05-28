@@ -20,7 +20,7 @@ from openpyxl.styles import Alignment, Font, PatternFill   # cell formatting
 from openpyxl.utils import get_column_letter         # converts column number to letter (1→"A")
 
 from extractors.base import CheckResult
-from utils.constants import SEVERITY_ORDER, TIER_EXCEL_FILLS
+from url_checker_utils.constants import SEVERITY_ORDER, TIER_EXCEL_FILLS
 
 
 # -----------------------------------------------------------------------------

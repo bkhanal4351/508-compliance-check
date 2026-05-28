@@ -24,14 +24,14 @@ from typing import Callable, Dict, List, Optional, Tuple
 import httpx   # the HTTP library — like requests but supports async
 
 from extractors.base import CheckResult, ExtractedUrl, UrlLocation
-from utils.constants import (
+from url_checker_utils.constants import (
     BODY_PREVIEW_BYTES,      # max bytes to read per page (5 KB)
     BROWSER_UA,              # the fake browser identity string
     DEFAULT_MAX_WORKERS,     # default number of parallel checks (20)
     DEFAULT_TIMEOUT,         # default seconds to wait per URL (10)
     MAX_RETRY_AFTER_SECS,    # max seconds to honour a Retry-After header (5)
 )
-from utils.url_utils import classify_skip_reason, is_epa_internal, normalize_url
+from url_checker_utils.url_utils import classify_skip_reason, is_epa_internal, normalize_url
 from validators.status_classifier import classify_url_result
 from validators.wayback import fetch_wayback
 

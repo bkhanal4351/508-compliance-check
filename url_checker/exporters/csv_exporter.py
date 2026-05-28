@@ -17,7 +17,7 @@ import csv   # Python's built-in library for reading and writing CSV files
 import io    # lets us write to memory instead of a real file on disk
 
 from extractors.base import CheckResult
-from utils.constants import SEVERITY_ORDER   # maps tier names to sort priority numbers
+from url_checker_utils.constants import SEVERITY_ORDER   # maps tier names to sort priority numbers
 
 
 def export_csv(results: list) -> bytes:

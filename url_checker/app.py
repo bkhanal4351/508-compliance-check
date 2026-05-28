@@ -31,7 +31,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from extractors.base import CheckResult, ExtractedUrl
 from exporters.csv_exporter import export_csv
 from exporters.excel_exporter import export_excel
-from utils.constants import (
+from url_checker_utils.constants import (
     DEFAULT_MAX_WORKERS,    # default number of parallel URL checks (20)
     DEFAULT_TIMEOUT,        # default seconds to wait per URL (10)
     SEVERITY_ORDER,         # dict: {"Dead": 0, "Suspicious": 1, "Alive": 2, "Skipped": 3}

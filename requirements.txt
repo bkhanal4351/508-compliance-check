@@ -1,14 +1,30 @@
+# Combined EPA 508 Compliance + URL Checker dependencies
+
+# ── Web framework ────────────────────────────────────────────────────────────
 streamlit>=1.35.0
-playwright>=1.44.0
-pikepdf>=8.15.0
-python-docx>=1.1.2
-python-pptx>=0.6.23
-openpyxl>=3.1.2
-Pillow>=10.3.0
-fpdf2>=2.7.9
-pydantic>=2.7.0
-pytest>=8.2.0
+
+# ── 508 compliance scanner ───────────────────────────────────────────────────
+playwright>=1.44.0       # headless browser for axe-core web scanner
+pikepdf>=8.15.0          # PDF structure analysis
+fpdf2>=2.7.9             # PDF report generation
+pydantic>=2.7.0          # data validation
 python-dotenv>=1.0.1
 Jinja2>=3.1.4
 requests>=2.32.0
 beautifulsoup4>=4.12.3
+Pillow>=10.3.0           # image analysis
+
+# ── URL checker ──────────────────────────────────────────────────────────────
+httpx>=0.27.0            # async HTTP client for concurrent URL checking
+
+# ── Document parsing (shared by both tools) ──────────────────────────────────
+python-docx>=1.1.2       # Word .docx files
+python-pptx>=0.6.23      # PowerPoint .pptx files
+openpyxl>=3.1.2          # Excel read + write
+PyMuPDF>=1.24.0          # PDF text + annotation link extraction
+
+# ── Data ─────────────────────────────────────────────────────────────────────
+pandas>=2.2.0            # results tables
+
+# ── Testing ──────────────────────────────────────────────────────────────────
+pytest>=8.2.0

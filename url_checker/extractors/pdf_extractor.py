@@ -19,7 +19,7 @@ import re
 from typing import List
 
 from extractors.base import BaseExtractor, ExtractedUrl
-from utils.url_utils import extract_plain_urls, get_context
+from url_checker_utils.url_utils import extract_plain_urls, get_context
 
 logger = logging.getLogger(__name__)
 
