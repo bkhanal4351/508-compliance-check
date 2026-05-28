@@ -29,6 +29,7 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 import streamlit as st
+from PIL import Image
 
 # ---------------------------------------------------------------------------
 # sys.path setup
@@ -64,9 +65,11 @@ logging.basicConfig(level=logging.INFO, stream=sys.stderr)
 # ---------------------------------------------------------------------------
 # Page config — must be the first Streamlit call
 # ---------------------------------------------------------------------------
+_epa_icon = Image.open(ROOT / "assets" / "epa_logo.png")
+
 st.set_page_config(
     page_title="EPA 508 & URL Checker",
-    page_icon="♿",
+    page_icon=_epa_icon,
     layout="wide",
 )
 
@@ -89,8 +92,12 @@ for _k, _v in _STATE_DEFAULTS.items():
 # ---------------------------------------------------------------------------
 # Shared page header + tabs
 # ---------------------------------------------------------------------------
-st.title("EPA Compliance Tools")
-st.caption("Section 508 / WCAG accessibility scanning · Dead-link verification")
+_hdr_img, _hdr_txt = st.columns([1, 10])
+with _hdr_img:
+    st.image(str(ROOT / "assets" / "epa_logo.png"), width=72)
+with _hdr_txt:
+    st.title("EPA Compliance Tools")
+    st.caption("Section 508 / WCAG accessibility scanning · Dead-link verification")
 
 tab_508, tab_url = st.tabs(["♿  508 Compliance Scanner", "🔗  URL Checker"])
 
